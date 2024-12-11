@@ -8,7 +8,7 @@ async function fetchCveDetails() {
     }
   
     try {
-      const response = await fetch(`http://localhost:8000/api/get-cve?id=${cveId}`);
+      const response = await fetch(`http://localhost:8000/api/get_cve_details?id=${cveId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch CVE details');
       }
