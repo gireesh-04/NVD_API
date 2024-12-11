@@ -7,7 +7,7 @@ async function fetchCVEs() {
   document.getElementById('error').style.display = 'none';
 
   try {
-    const response = await fetch(`http://localhost:8000/api/get-cves?page=${currentPage}&limit=${perPage}`);
+    const response = await fetch(`http://localhost:8000/api/get_cve_data?page=${currentPage}&limit=${perPage}`);
     if (!response.ok) {
       throw new Error('Failed to fetch data');
     }
