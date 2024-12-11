@@ -6,11 +6,9 @@ from mongoengine import connect, disconnect
 
 app = Flask(__name__)
 
-# Define MongoDB connection
 MONGO_URI = 'mongodb+srv://gireesh_04:ROWifs5BzMANczn4@cluster0.rfcdd.mongodb.net/NVD_Data'
-connect(host=MONGO_URI)  # This ensures connection to MongoDB is established.
+connect(host=MONGO_URI)  
 
-# Function to format date strings
 def format_date(date_str):
     try:
         date_obj = datetime.strptime(date_str[:10], "%Y-%m-%d")
@@ -19,11 +17,9 @@ def format_date(date_str):
         print(f"Date formatting error: {e}")
         return None
 
-# Transform descriptions
 def transform_descriptions(descriptions):
     return [Description(lang=desc["lang"], value=desc["value"]) for desc in descriptions]
 
-# Transform CVSS metrics
 def transform_cvss_metrics(metrics):
     cvss_metrics_v2 = []
     if 'cvssMetricV2' in metrics:
@@ -53,8 +49,6 @@ def transform_cvss_metrics(metrics):
             ))
     return cvss_metrics_v2
 
-# Transform configurations
-# Transform configurations
 def transform_configurations(configurations):
     transformed_configs = []
     
@@ -70,21 +64,21 @@ def transform_configurations(configurations):
                             'matchCriteriaId': cpe.get('matchCriteriaId', '')
                         }
                         for cpe in node.get('cpeMatch', [])
-                        if 'criteria' in cpe  # Ensure there's a criteria field
+                        if 'criteria' in cpe
                     ]
-                    # Create the transformed node object
+        
                     transformed_node = Node(
                         operator=node.get('operator', ''),
                         negate=node.get('negate', False),
-                        cpeMatch=cpe_matches  # Store the list of cpeMatch dictionaries
+                        cpeMatch=cpe_matches  
                     )
-                    # Append the transformed node to the configurations list
+                    
                     transformed_configs.append(Configuration(nodes=[transformed_node]))
     return transformed_configs
 
 
 
-# Function to fetch and store CVEs
+
 def store_cves():
     results_per_page = 20
     start_index = 0
@@ -135,7 +129,7 @@ def store_cves():
     finally:
         disconnect()
 
-# Route to trigger CVE storage
+
 @app.route('/store-cves', methods=['GET'])
 def trigger_store():
     store_cves()
