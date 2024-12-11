@@ -10,7 +10,7 @@ client = MongoClient(mongo_uri)
 db = client.NVD_Data  
 cve_collection = db.c_v_e 
 
-@app.route('/api/get-cves', methods=['GET'])
+@app.route('/api/get_cve_data', methods=['GET'])
 def get_cves():
     try:
         
@@ -45,7 +45,7 @@ def get_cves():
         return jsonify({'error': 'Internal Server Error'}), 500
 
 
-@app.route('/api/get-cve', methods=['GET'])
+@app.route('/api/get_cve_details', methods=['GET'])
 def get_cve():
     try:
         cve_id = request.args.get('id')
